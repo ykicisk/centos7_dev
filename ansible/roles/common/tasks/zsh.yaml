@@ -1,0 +1,11 @@
+---
+- name: install zsh
+  yum: name=zsh state=latest
+- name: Be sure shell is zsh
+  shell: grep vagrant /etc/passwd  
+  changed_when: no
+  register: result_sh 
+- name: Change shell to zsh
+  shell: chsh -s /bin/zsh vagrant
+  when: result_sh.stdout.find('/bin/zsh') == -1
+  become: yes

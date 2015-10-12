@@ -1,0 +1,8 @@
+---
+- hosts: vagrant
+  become_method: sudo
+  user: vagrant
+  vars:
+    srcdir: "/usr/local/src"
+  roles:
+    - common

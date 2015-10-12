@@ -1,0 +1,20 @@
+---
+- name: install dependencies for vim
+  yum: name={{item}} state=latest
+  with_items:
+    - lua-devel
+    - python-devel
+    - ruby-devel
+    - ncurses-devel
+  become: yes
+- name: download vim source file
+  unarchive: src={{vimurl}} dest={{srcdir}} copy=no creates={{srcdir}}/vim74
+  become: yes
+- name: make .vim/bundle
+  file: path=~/.vim/bundle state=directory
+- name: git clone neobundle 
+  git: repo=https://github.com/Shougo/neobundle.vim dest=~/.vim/bundle/neobundle.vim accept_hostkey=yes
+- name: install plugins by neobundle
+  shell: ~/.vim/bundle/neobundle.vim/bin/neoinstall creates=~/.vim/bundle/molokai
+- name: cp molokai theme
+  shell: cp -r ~/.vim/bundle/molokai/colors ~/.vim creates=~/.vim/colors/molokai.vim

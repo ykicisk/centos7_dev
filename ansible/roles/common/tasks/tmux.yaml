@@ -1,0 +1,13 @@
+---
+- name: install dependencies for tmux 2.0
+  yum: name={{item}} state=latest
+  with_items:
+    - libevent-devel
+    - ncurses-devel
+  become: yes
+- name: download tmux source file
+  unarchive: src={{tmuxurl}} dest={{srcdir}} copy=no creates={{srcdir}}/tmux-2.0
+  become: yes
+- name: install tmux from source file
+  shell: ./configure && make && make install chdir={{srcdir}}/tmux-2.0 creates=/usr/local/bin/tmux
+  become: yes

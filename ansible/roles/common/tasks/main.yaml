@@ -1,0 +1,13 @@
+---
+- name: git clone dotfiles
+  git: repo={{giturl}} dest=/usr/local/dotfiles accept_hostkey=yes
+  become: yes
+- name: copy dotfiles
+  shell: ln -s /usr/local/dotfiles/{{item}} . creates=~/.tmux.conf
+  with_items:
+    - .vimrc
+    - .zshrc
+    - .tmux.conf
+- include: zsh.yaml
+- include: tmux.yaml
+- include: vim.yaml
